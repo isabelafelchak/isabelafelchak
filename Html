@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferramentas de Estudo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Ferramentas de Estudo</h1>
+        <nav>
+            <ul>
+                <li><a href="#cronograma">Cronograma</a></li>
+                <li><a href="#dicas">Dicas de Estudo</a></li>
+                <li><a href="#exercicios">Exercícios</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="cronograma">
+            <h2>Cronograma de Estudos</h2>
+            <div>
+                <label for="study-time">Tempo de estudo (min):</label>
+                <input type="number" id="study-time" placeholder="Digite o tempo">
+                <button id="start-timer">Iniciar Cronômetro</button>
+                <p id="timer">00:00</p>
+            </div>
+        </section>
+
+        <section id="dicas">
+            <h2>Dicas de Estudo</h2>
+            <ul id="dicas-lista">
+                <li>Estude com intervalos regulares (método Pomodoro).</li>
+                <li>Reveja o conteúdo ao final do dia.</li>
+            </ul>
+            <input type="text" id="nova-dica" placeholder="Adicionar nova dica">
+            <button id="adicionar-dica">Adicionar Dica</button>
+        </section>
+
+        <section id="exercicios">
+            <h2>Exercícios</h2>
+            <p>Acesse os exercícios em <a href="https://www.exemplo.com">exemplo.com</a>.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>Desenvolvido em parceria com a Alura.</p>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+main {
+    padding: 20px;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #333;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#timer {
+    font-size: 2em;
+    margin-top: 10px;
+}
+
+footer {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+// Cronômetro
+let timer;
+let seconds = 0;
+let minutes = 0;
+const timerDisplay = document.getElementById('timer');
+const startButton = document.getElementById('start-timer');
+
+startButton.addEventListener('click', function() {
+    const studyTime = parseInt(document.getElementById('study-time').value);
+    if (isNaN(studyTime) || studyTime <= 0) {
+        alert('Por favor, insira um valor válido de minutos.');
+        return;
+    }
+
+    clearInterval(timer); // Reinicia o cronômetro, se já estiver rodando
+    minutes = studyTime;
+    seconds = 0;
+
+    timer = setInterval(function() {
+        if (seconds === 0 && minutes === 0) {
+            clearInterval(timer);
+            alert('Tempo de estudo concluído!');
+        } else if (seconds === 0) {
+            seconds = 59;
+            minutes--;
+        } else {
+            seconds--;
+        }
+        timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }, 1000);
+});
+
+// Adicionar nova dica
+const addDicaButton = document.getElementById('adicionar-dica');
+const dicasLista = document.getElementById('dicas-lista');
+
+addDicaButton.addEventListener('click', function() {
+    const novaDica = document.getElementById('nova-dica').value;
+    if (novaDica.trim() !== '') {
+        const novaDicaElement = document.createElement('li');
+        novaDicaElement.textContent = novaDica;
+        dicasLista.appendChild(novaDicaElement);
+        document.getElementById('nova-dica').value = ''; // Limpa o campo
+    } else {
+        alert('Por favor, insira uma dica válida.');
+    }
+});
